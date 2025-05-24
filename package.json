@@ -1,0 +1,39 @@
+{
+  "name": "kseniya",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@react-three/drei": "^10.0.4",
+    "@react-three/fiber": "^9.1.0",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "clsx": "^2.1.1",
+    "gsap": "^3.12.7",
+    "motion": "^12.4.7",
+    "next": "15.1.6",
+    "ogl": "^1.0.11",
+    "postgres": "^3.4.5",
+    "react": "^19.0.0",
+    "react-zoom-pan-pinch": "^3.7.0",
+    "three": "^0.174.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@types/node": "^20.17.19",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@types/three": "^0.174.0",
+    "eslint": "^9.20.1",
+    "eslint-config-next": "15.1.6",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3"
+  },
+  "packageManager": "pnpm@10.3.0+sha512.ee592eda8815a8a293c206bb0917c4bb0ff274c50def7cbc17be05ec641fc2d1b02490ce660061356bd0d126a4d7eb2ec8830e6959fb8a447571c631d5a2442d"
+}
