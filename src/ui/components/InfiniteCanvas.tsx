@@ -21,8 +21,8 @@ export default function InfiniteCanvas({ children }: InfiniteCanvasProps) {
       maxScale={10}
       >
       <TransformComponent>
-        <div className="flex items-center justify-center w-screen h-screen">`
-        {children}
+        <div className="flex items-center justify-center w-screen h-screen">
+          {children}
         </div>
       </TransformComponent>
       </TransformWrapper>
