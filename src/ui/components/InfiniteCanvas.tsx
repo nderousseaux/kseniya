@@ -17,7 +17,7 @@ export default function InfiniteCanvas({ children }: InfiniteCanvasProps) {
       wheel={{ excluded: ['text-selectable'] }}
       pinch={{ excluded: ['text-selectable'] }}
       limitToBounds={false}
-      minScale={0.7}
+      minScale={0.1}
       maxScale={10}
       >
       <TransformComponent>
