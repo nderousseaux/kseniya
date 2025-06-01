@@ -5,24 +5,24 @@ export default function Group({ group, index }: { group?: { name: string; quote?
     <>
       {index === 3 && group?.quote && (
         <div className="w-full bg-blue-50 border border-blue-300 rounded p-4 mb-4 shadow text-blue-900 text-sm">
-          <span className="italic">"{group.quote}"</span>
+          <span className="italic">&quot;{group.quote}&quot;</span>
         </div>
       )}
       <div className="border-solid border-2 border-red-500 p-4 rounded-lg w-fit bg-white relative">
         {/* Show quote outside, at right, only for index 0 */}
         {index === 0 && group?.quote && (
           <div className="absolute -right-4 bottom-0 translate-y-[-100%] translate-x-[100%] w-60 bg-blue-50 border border-blue-300 rounded p-4 shadow text-blue-900 text-sm">
-            <span className="italic">"{group.quote}"</span>
+            <span className="italic">&quot;{group.quote}&quot;</span>
           </div>
         )}
         {index === 1 && group?.quote && (
           <div className="absolute -right-4 bottom-0 translate-y-[-100%] translate-x-[100%] w-60 bg-blue-50 border border-blue-300 rounded p-4 shadow text-blue-900 text-sm">
-            <span className="italic">"{group.quote}"</span>
+            <span className="italic">&quot;{group.quote}&quot;</span>
           </div>
         )}
         {index === 2 && group?.quote && (
           <div className="absolute -right-4 top-0 translate-y-[100%] translate-x-[100%] w-60 bg-blue-50 border border-blue-300 rounded p-4 shadow text-blue-900 text-sm">
-            <span className="italic">"{group.quote}"</span>
+            <span className="italic">&quot;{group.quote}&quot;</span>
           </div>
         )}
         <div className="flex gap-4">

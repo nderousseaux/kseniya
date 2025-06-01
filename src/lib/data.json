@@ -1,149 +1,149 @@
 {
-    "title": "Page d'exemple",
-    "description": "Un exemple de page avec des textes de description de longueurs variées.",
-    "groups": [
-        {
-            "name": "Groupe 1",
-            "quote": "Ceci est une citation d'exemple pour le groupe 1.",
-            "items": [
-                {
-                    "name": "Item 1",
-                    "description": "Court.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item 2",
-                    "description": "Description un peu plus longue pour cet item.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item 3",
-                    "description": "Voici une description de taille moyenne, ni trop courte ni trop longue.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item 4",
-                    "description": "Un texte très court.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item 5",
-                    "description": "Ceci est une description beaucoup plus longue destinée à tester l'affichage de textes de différentes tailles dans l'interface utilisateur. Elle contient plusieurs phrases pour simuler un contenu réel.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item 6",
-                    "description": "Moyenne longueur.",
-                    "img": "/img/dog.jpg"
-                }
-            ]
-        },
-        {
-            "name": "Groupe 2",
-            "items": [
-                {
-                    "name": "Item A",
-                    "description": "Très court.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item B",
-                    "description": "Description détaillée pour cet élément du groupe 2, qui permet de voir comment le texte s'adapte à l'espace disponible.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item C",
-                    "description": "Courte.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item D",
-                    "description": "Une description de taille moyenne pour tester la diversité des longueurs.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item E",
-                    "description": "Un texte extrêmement long pour cet item, afin de vérifier le comportement de l'affichage lorsque la description dépasse largement la taille habituelle. Cela peut inclure plusieurs phrases, des virgules, et même des points-virgules pour simuler un vrai paragraphe.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item F",
-                    "description": "Moyenne.",
-                    "img": "/img/dog.jpg"
-                }
-            ]
-        },
-        {
-            "name": "Groupe 3",
-            "quote": "Citation pour le groupe 3, qui illustre la diversité des contenus.",
-            "items": [
-                {
-                    "name": "Item Alpha",
-                    "description": "Bref.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item Beta",
-                    "description": "Description un peu plus longue pour varier.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item Gamma",
-                    "description": "Une description très longue pour cet item, qui permet de tester l'affichage de paragraphes entiers dans la liste. Cela inclut plusieurs phrases pour simuler un contenu riche et détaillé.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item Delta",
-                    "description": "Courte.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item Epsilon",
-                    "description": "Description de taille moyenne.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item Zeta",
-                    "description": "Un texte très court.",
-                    "img": "/img/dog.jpg"
-                }
-            ]
-        },
-        {
-            "name": "Groupe 4",
-            "quote": "Une citation pour le groupe 4, mettant en avant la variété des descriptions.",
-            "items": [
-                {
-                    "name": "Item I",
-                    "description": "Description longue pour cet item, afin de tester la gestion des textes volumineux dans l'interface.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item J",
-                    "description": "Court.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item K",
-                    "description": "Moyenne longueur pour cet élément.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item L",
-                    "description": "Une description très détaillée et longue, qui s'étend sur plusieurs lignes pour simuler un cas d'utilisation réel où l'utilisateur souhaite fournir beaucoup d'informations.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item M",
-                    "description": "Courte.",
-                    "img": "/img/dog.jpg"
-                },
-                {
-                    "name": "Item N",
-                    "description": "Description de taille moyenne pour compléter la diversité.",
-                    "img": "/img/dog.jpg"
-                }
-            ]
-        }
-    ]
+	"title": "Page d'exemple",
+	"description": "Un exemple de page avec des textes de description de longueurs variées.",
+	"groups": [
+		{
+			"name": "Groupe 1",
+			"quote": "Ceci est une citation d'exemple pour le groupe 1.",
+			"items": [
+				{
+					"name": "Item 1",
+					"description": "Court.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item 2",
+					"description": "Description un peu plus longue pour cet item.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item 3",
+					"description": "Voici une description de taille moyenne, ni trop courte ni trop longue.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item 4",
+					"description": "Un texte très court.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item 5",
+					"description": "Ceci est une description beaucoup plus longue destinée à tester l'affichage de textes de différentes tailles dans l'interface utilisateur. Elle contient plusieurs phrases pour simuler un contenu réel.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item 6",
+					"description": "Moyenne longueur.",
+					"img": "/img/dog.jpg"
+				}
+			]
+		},
+		{
+			"name": "Groupe 2",
+			"items": [
+				{
+					"name": "Item A",
+					"description": "Très court.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item B",
+					"description": "Description détaillée pour cet élément du groupe 2, qui permet de voir comment le texte s'adapte à l'espace disponible.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item C",
+					"description": "Courte.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item D",
+					"description": "Une description de taille moyenne pour tester la diversité des longueurs.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item E",
+					"description": "Un texte extrêmement long pour cet item, afin de vérifier le comportement de l'affichage lorsque la description dépasse largement la taille habituelle. Cela peut inclure plusieurs phrases, des virgules, et même des points-virgules pour simuler un vrai paragraphe.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item F",
+					"description": "Moyenne.",
+					"img": "/img/dog.jpg"
+				}
+			]
+		},
+		{
+			"name": "Groupe 3",
+			"quote": "Citation pour le groupe 3, qui illustre la diversité des contenus.",
+			"items": [
+				{
+					"name": "Item Alpha",
+					"description": "Bref.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item Beta",
+					"description": "Description un peu plus longue pour varier.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item Gamma",
+					"description": "Une description très longue pour cet item, qui permet de tester l'affichage de paragraphes entiers dans la liste. Cela inclut plusieurs phrases pour simuler un contenu riche et détaillé.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item Delta",
+					"description": "Courte.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item Epsilon",
+					"description": "Description de taille moyenne.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item Zeta",
+					"description": "Un texte très court.",
+					"img": "/img/dog.jpg"
+				}
+			]
+		},
+		{
+			"name": "Groupe 4",
+			"quote": "Une citation pour le groupe 4, mettant en avant la variété des descriptions.",
+			"items": [
+				{
+					"name": "Item I",
+					"description": "Description longue pour cet item, afin de tester la gestion des textes volumineux dans l'interface.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item J",
+					"description": "Court.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item K",
+					"description": "Moyenne longueur pour cet élément.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item L",
+					"description": "Une description très détaillée et longue, qui s'étend sur plusieurs lignes pour simuler un cas d'utilisation réel où l'utilisateur souhaite fournir beaucoup d'informations.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item M",
+					"description": "Courte.",
+					"img": "/img/dog.jpg"
+				},
+				{
+					"name": "Item N",
+					"description": "Description de taille moyenne pour compléter la diversité.",
+					"img": "/img/dog.jpg"
+				}
+			]
+		}
+	]
 }
