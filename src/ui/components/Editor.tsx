@@ -1,6 +1,7 @@
 import React from "react";
+import { DataType, GroupType, ItemType } from "@/src/lib/DataContext";
 
-export default function Editor({ data, setData }: { data: any; setData: (d: any) => void }) {
+export default function Editor({ data, setData }: { data: DataType | undefined; setData: (d: DataType) => void }) {
   if (!data) {
     return <div>Chargement des données...</div>;
   }
@@ -12,13 +13,13 @@ export default function Editor({ data, setData }: { data: any; setData: (d: any)
     setData({ ...data, description: e.target.value });
   };
 
-  const handleGroupChange = (idx: number, field: string, value: string) => {
+  const handleGroupChange = (idx: number, field: keyof GroupType, value: string) => {
     const groups = [...(data.groups || [])];
     groups[idx] = { ...groups[idx], [field]: value };
     setData({ ...data, groups });
   };
 
-  const handleItemChange = (groupIdx: number, itemIdx: number, field: string, value: string) => {
+  const handleItemChange = (groupIdx: number, itemIdx: number, field: keyof ItemType, value: string) => {
     const groups = [...(data.groups || [])];
     const items = [...(groups[groupIdx]?.items || [])];
     items[itemIdx] = { ...items[itemIdx], [field]: value };
@@ -66,7 +67,7 @@ export default function Editor({ data, setData }: { data: any; setData: (d: any)
       <div className="mb-4">
         <label className="block font-semibold">Groups</label>
         <button className="ml-2 px-2 py-1 bg-blue-200 rounded" onClick={addGroup} type="button">Add Group</button>
-        {(data.groups || []).map((group: any, groupIdx: number) => (
+        {(data.groups || []).map((group: GroupType, groupIdx: number) => (
           <div key={groupIdx} className="border p-2 my-2 rounded">
             <input
               className="border p-1 mr-2"
@@ -83,7 +84,7 @@ export default function Editor({ data, setData }: { data: any; setData: (d: any)
             <div className="ml-4">
               <label className="font-semibold">Items</label>
               <button className="ml-2 px-2 py-1 bg-green-200 rounded" onClick={() => addItem(groupIdx)} type="button">Add Item</button>
-              {(group.items || []).map((item: any, itemIdx: number) => (
+              {(group.items || []).map((item: ItemType, itemIdx: number) => (
                 <div key={itemIdx} className="flex gap-2 my-1">
                   <input
                     className="border p-1"

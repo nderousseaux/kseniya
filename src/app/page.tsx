@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useData } from "@/src/app/DataContext";
+import { useData } from "@/src/lib/DataContext";
 import Center from "@/src/ui/components/Center";
 import Group from "@/src/ui/components/Group";
 import InfiniteCanvas from "../ui/components/InfiniteCanvas";

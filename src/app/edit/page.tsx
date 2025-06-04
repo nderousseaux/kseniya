@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useData } from "@/src/app/DataContext";
+import { useData } from "@/src/lib/DataContext";
 import Editor from "@/src/ui/components/Editor";
 
 export default function EditPage() {
