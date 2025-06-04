@@ -1,14 +1,34 @@
+'use client';
 import "@/src/ui/global.css";
-import InfiniteCanvas from '@/src/ui/components/InfiniteCanvas';
+import React, { useState, useEffect } from "react";
+import dataJson from "@/src/lib/data.json";
+import { DataContext } from "./DataContext";
 
 // Main layout component
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const [data, setData] = useState<any>(undefined);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("appData");
+    if (saved) {
+      setData(JSON.parse(saved));
+    } else {
+      setData(dataJson);
+    }
+  }, []);
+
+  // Save to localStorage on data change
+  useEffect(() => {
+    localStorage.setItem("appData", JSON.stringify(data));
+  }, [data]);
+
   return (
     <html>
       <body className="antialiased">
-        <InfiniteCanvas>
+        <DataContext.Provider value={{ data, setData }}>
           {children}
-        </InfiniteCanvas>
+        </DataContext.Provider>
       </body>
     </html>
   );
