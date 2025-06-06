@@ -8,6 +8,54 @@ import Editor from "../../ui/components/Editor";
 
 export default function EditPage() {
   const { data, setData } = useData();
+  const [authenticated, setAuthenticated] = React.useState(false);
+  const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState("");
+
+  const editPassword = process.env.NEXT_PUBLIC_EDIT_PASSWORD || "admin";
+
+  // Password protection
+  if (!authenticated) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-[#fafafa] z-50">
+        <div className="bg-white p-8 rounded shadow-lg flex flex-col items-center border border-gray-200">
+          <h2 className="text-xl font-bold mb-4">Enter Password</h2>
+          <input
+            type="password"
+            className="border p-2 mb-4 w-64"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                if (password === editPassword) {
+                  setAuthenticated(true);
+                  setError("");
+                } else {
+                  setError("Incorrect password");
+                }
+              }
+            }}
+            autoFocus
+          />
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            onClick={() => {
+              if (password === editPassword) {
+                setAuthenticated(true);
+                setError("");
+              } else {
+                setError("Incorrect password");
+              }
+            }}
+          >
+            Submit
+          </button>
+          {error && <div className="text-red-500 mt-2">{error}</div>}
+        </div>
+      </div>
+    );
+  }
 
   if (!data) {
     return (
