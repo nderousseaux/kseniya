@@ -54,7 +54,7 @@ export default function Editor({ data, setData }: { data: DataType | undefined; 
   };
 
   return (
-    <div className="p-6 bg-white rounded shadow max-w-2xl">
+    <div className="p-6 bg-white rounded shadow max-w-2xl max-h-[80vh] overflow-y-auto">
       <h2 className="text-xl font-bold mb-4">Edit Page</h2>
       <div className="mb-4">
         <label className="block font-semibold">Title</label>
