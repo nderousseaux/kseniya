@@ -36,12 +36,26 @@ export default function Editor({ data, setData }: { data: DataType | undefined; 
     });
   };
 
+  const deleteGroup = (groupIdx: number) => {
+    const groups = [...(data.groups || [])];
+    groups.splice(groupIdx, 1);
+    setData({ ...data, groups });
+  };
+
   const addItem = (groupIdx: number) => {
     const groups = [...(data.groups || [])];
     groups[groupIdx] = {
       ...groups[groupIdx],
       items: [...(groups[groupIdx].items || []), { name: "", description: "", img: "" }]
     };
+    setData({ ...data, groups });
+  };
+
+  const deleteItem = (groupIdx: number, itemIdx: number) => {
+    const groups = [...(data.groups || [])];
+    const items = [...(groups[groupIdx]?.items || [])];
+    items.splice(itemIdx, 1);
+    groups[groupIdx] = { ...groups[groupIdx], items };
     setData({ ...data, groups });
   };
 
@@ -70,23 +84,32 @@ export default function Editor({ data, setData }: { data: DataType | undefined; 
         <button className="ml-2 px-2 py-1 bg-blue-200 rounded" onClick={addGroup} type="button">Add Group</button>
         {(data.groups || []).map((group: GroupType, groupIdx: number) => (
           <div key={groupIdx} className="border p-2 my-2 rounded">
-            <input
-              className="border p-1 mr-2"
-              placeholder="Group Name"
-              value={group.name}
-              onChange={e => handleGroupChange(groupIdx, "name", e.target.value)}
-            />
-            <input
-              className="border p-1 mr-2"
-              placeholder="Group Quote"
-              value={group.quote || ""}
-              onChange={e => handleGroupChange(groupIdx, "quote", e.target.value)}
-            />
+            <div className="flex items-center mb-2">
+              <input
+                className="border p-1 mr-2"
+                placeholder="Group Name"
+                value={group.name}
+                onChange={e => handleGroupChange(groupIdx, "name", e.target.value)}
+              />
+              <input
+                className="border p-1 mr-2"
+                placeholder="Group Quote"
+                value={group.quote || ""}
+                onChange={e => handleGroupChange(groupIdx, "quote", e.target.value)}
+              />
+              <button
+                className="ml-2 px-2 py-1 bg-red-200 rounded text-red-700 hover:bg-red-300"
+                type="button"
+                onClick={() => deleteGroup(groupIdx)}
+              >
+                Delete Group
+              </button>
+            </div>
             <div className="ml-4">
               <label className="font-semibold">Items</label>
               <button className="ml-2 px-2 py-1 bg-green-200 rounded" onClick={() => addItem(groupIdx)} type="button">Add Item</button>
               {(group.items || []).map((item: ItemType, itemIdx: number) => (
-                <div key={itemIdx} className="flex gap-2 my-1">
+                <div key={itemIdx} className="flex gap-2 my-1 items-center">
                   <input
                     className="border p-1"
                     placeholder="Name"
@@ -105,6 +128,13 @@ export default function Editor({ data, setData }: { data: DataType | undefined; 
                     value={item.img || ""}
                     onChange={e => handleItemChange(groupIdx, itemIdx, "img", e.target.value)}
                   />
+                  <button
+                    className="ml-2 px-2 py-1 bg-red-100 rounded text-red-700 hover:bg-red-300"
+                    type="button"
+                    onClick={() => deleteItem(groupIdx, itemIdx)}
+                  >
+                    Delete Item
+                  </button>
                 </div>
               ))}
             </div>
