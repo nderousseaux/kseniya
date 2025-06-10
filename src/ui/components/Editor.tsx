@@ -2,6 +2,8 @@ import React from "react";
 import { DataType, GroupType, ItemType } from "@/src/lib/DataContext";
 
 export default function Editor({ data, setData }: { data: DataType | undefined; setData: (d: DataType) => void }) {
+  const [editPassword, setEditPassword] = React.useState(data?.password || "");
+
   if (!data) {
     return <div>Chargement des données...</div>;
   }
@@ -43,14 +45,13 @@ export default function Editor({ data, setData }: { data: DataType | undefined; 
     setData({ ...data, groups });
   };
 
-  const downloadJson = () => {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "data.json";
-    a.click();
-    URL.revokeObjectURL(url);
+  const saveToDb = async () => {
+    await fetch("/api/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...data, password: editPassword }),
+    });
+    alert("Data saved to database!");
   };
 
   return (
@@ -110,8 +111,17 @@ export default function Editor({ data, setData }: { data: DataType | undefined; 
           </div>
         ))}
       </div>
-      <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded" type="button" onClick={downloadJson}>
-        Download JSON
+      <div className="mb-4">
+        <label className="block font-semibold">Edit Password</label>
+        <input
+          className="border p-2 w-full"
+          type="password"
+          value={editPassword}
+          onChange={e => setEditPassword(e.target.value)}
+        />
+      </div>
+      <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded" type="button" onClick={saveToDb}>
+        Save to Database
       </button>
     </div>
   );

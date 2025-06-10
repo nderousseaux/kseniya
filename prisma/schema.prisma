@@ -1,0 +1,35 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Data model for the app, matching DataType, GroupType, ItemType
+model AppData {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  groups      Group[]
+  password    String?  // Password for edit
+}
+
+model Group {
+  id        Int      @id @default(autoincrement())
+  name      String
+  quote     String?
+  items     Item[]
+  appDataId Int
+  appData   AppData  @relation(fields: [appDataId], references: [id])
+}
+
+model Item {
+  id       Int    @id @default(autoincrement())
+  name     String
+  description String
+  img      String?
+  groupId  Int
+  group    Group  @relation(fields: [groupId], references: [id])
+}

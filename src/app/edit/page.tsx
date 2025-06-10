@@ -12,7 +12,8 @@ export default function EditPage() {
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
 
-  const editPassword = process.env.NEXT_PUBLIC_EDIT_PASSWORD || "admin";
+  // Fetch password from data if available
+  const editPassword = data?.password || "admin";
 
   // Password protection
   if (!authenticated) {

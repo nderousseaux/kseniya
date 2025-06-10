@@ -16,6 +16,7 @@ export type DataType = {
   title: string;
   description: string;
   groups: GroupType[];
+  password?: string; // Add password to DataType
 };
 
 export type DataContextType = {
