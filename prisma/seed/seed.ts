@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import data from '../src/lib/data.json';
+import data from '@/prisma/seed/data.json';
 
 const prisma = new PrismaClient();
 
@@ -14,17 +14,19 @@ async function main() {
     data: {
       title: data.title,
       description: data.description,
-      groups: data.groups.map((g: any) => ({
-        name: g.name,
-        quote: g.quote,
-        items: {
-          create: g.items.map((i: any) => ({
-            name: i.name,
-            description: i.description,
-            img: i.img,
-          })),
-        },
-      })),
+      groups: {
+        create: data.groups.map((g: any) => ({
+          name: g.name,
+          quote: g.quote,
+          items: {
+            create: g.items.map((i: any) => ({
+              name: i.name,
+              description: i.description,
+              img: i.img,
+            })),
+          },
+        })),
+      },
     },
   });
 }
