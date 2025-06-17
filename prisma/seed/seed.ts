@@ -1,7 +1,13 @@
 import { PrismaClient } from '@prisma/client';
-import data from '@/prisma/seed/data.json';
+
+import type { Board } from '@/src/types/Board';
+import type { Group } from '@/src/types/Group';
+import type { Item } from '@/src/types/Item';
 
 const prisma = new PrismaClient();
+
+// Load the seed data from TypeScript file
+import data from '@/prisma/seed/data';
 
 async function main() {
   // Clear existing data
@@ -15,11 +21,11 @@ async function main() {
       title: data.title,
       description: data.description,
       groups: {
-        create: data.groups.map((g: any) => ({
+        create: (data.groups ?? []).map((g: Group) => ({
           name: g.name,
           quote: g.quote,
           items: {
-            create: g.items.map((i: any) => ({
+            create: (g.items ?? []).map((i: Item) => ({
               name: i.name,
               description: i.description,
               img: i.img,
