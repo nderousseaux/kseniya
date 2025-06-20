@@ -7,28 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model AppData {
-  id          Int     @id @default(autoincrement())
+model Board {
+  id          String   @id @default(uuid())
   title       String
   description String
   password    String?
   groups      Group[]
+  quotes      Quote[]
 }
 
 model Group {
-  id        Int     @id @default(autoincrement())
+  id        String   @id @default(uuid())
   name      String
-  quote     String?
-  appDataId Int
-  appData   AppData @relation(fields: [appDataId], references: [id])
+  boardId   String
+  board     Board    @relation(fields: [boardId], references: [id])
   items     Item[]
+  posX      Int
+  posY      Int
 }
 
 model Item {
-  id          Int     @id @default(autoincrement())
+  id          String   @id @default(uuid())
   name        String
   description String
-  img         String?
-  groupId     Int
-  group       Group   @relation(fields: [groupId], references: [id])
+  groupId     String
+  group       Group    @relation(fields: [groupId], references: [id])
+  image       Bytes?
+}
+
+model Quote {
+  id        String   @id @default(uuid())
+  text      String
+  posX      Int
+  posY      Int
+  boardId   String
+  board     Board    @relation(fields: [boardId], references: [id])
 }

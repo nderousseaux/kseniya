@@ -1,30 +1,108 @@
-import type { Board } from '@/src/types/Board';
-import type { Group } from '@/src/types/Group';
-import type { Item } from '@/src/types/Item';
+// Exemple of a board, for seeding the prisma database
 
-const items1: Item[] = [
-  { name: "Item 1", description: "Court.", img: "/img/dog.jpg" },
-  { name: "Item 2", description: "Description un peu plus longue pour cet item.", img: "/img/dog.jpg" },
-  { name: "Item 3", description: "Voici une description de taille moyenne, ni trop courte ni trop longue.", img: "/img/dog.jpg" },
-  { name: "Item 4", description: "Un texte très court.", img: "/img/dog.jpg" },
-  { name: "Item 5", description: "Ceci est une description beaucoup plus longue destinée à tester l'affichage de textes de différentes tailles dans l'interface utilisateur. Elle contient plusieurs phrases pour simuler un contenu réel.", img: "/img/dog.jpg" },
-  { name: "Item 6", description: "Moyenne longueur.", img: "/img/dog.jpg" }
-];
+import { Board, Group, Item, Quote } from '@prisma/client';
 
-const items2: Item[] = [
-  { name: "Item A", description: "Très court.", img: "/img/dog.jpg" },
-  { name: "Item B", description: "", img: "/img/dog.jpg" }
-];
-
-const groups: Group[] = [
-  { name: "Groupe 1", quote: "Ceci est une citation d'exemple pour le groupe 1.", items: items1 },
-  { name: "Groupe 2", quote: "", items: items2 }
-];
-
-const data: Omit<Board, 'password'> = {
-  title: "Page d'exemple",
-  description: "Un exemple de page avec des textes de description de longueurs variées.",
-  groups
+export const board: Board = {
+  id: 'board-1',
+  title: 'Sample Board',
+  description: 'A board for testing purposes',
+  password: process.env.DEFAULT_BOARD_PASSWORD || 'default-password',
 };
 
-export default data;
+export const groups: Group[] = [
+  {
+    id: 'group-1',
+    name: 'Group Alpha',
+    boardId: board.id,
+    posX: 0,
+    posY: 0,
+  },
+  {
+    id: 'group-2',
+    name: 'Group Beta',
+    boardId: board.id,
+    posX: 1,
+    posY: 0,
+  },
+  {
+    id: 'group-3',
+    name: 'Group Gamma',
+    boardId: board.id,
+    posX: 0,
+    posY: 1,
+  },
+  {
+    id: 'group-4',
+    name: 'Group Delta',
+    boardId: board.id,
+    posX: 1,
+    posY: 1,
+  },
+];
+
+// Use Partial<Item> to avoid type errors for Bytes? field in placeholder data
+export const items: Partial<Item>[] = [
+  // Group 1: 7 items
+  ...Array.from({ length: 7 }, (_, i) => ({
+    id: `item-1-${i+1}`,
+    name: `Alpha Item ${i+1}`,
+    description: `Description for Alpha Item ${i+1}`,
+    groupId: 'group-1',
+    image: null,
+  })),
+  // Group 2: 8 items
+  ...Array.from({ length: 8 }, (_, i) => ({
+    id: `item-2-${i+1}`,
+    name: `Beta Item ${i+1}`,
+    description: `Description for Beta Item ${i+1}`,
+    groupId: 'group-2',
+    image: null,
+  })),
+  // Group 3: 6 items
+  ...Array.from({ length: 6 }, (_, i) => ({
+    id: `item-3-${i+1}`,
+    name: `Gamma Item ${i+1}`,
+    description: `Description for Gamma Item ${i+1}`,
+    groupId: 'group-3',
+    image: null,
+  })),
+  // Group 4: 9 items
+  ...Array.from({ length: 9 }, (_, i) => ({
+    id: `item-4-${i+1}`,
+    name: `Delta Item ${i+1}`,
+    description: `Description for Delta Item ${i+1}`,
+    groupId: 'group-4',
+    image: null,
+  })),
+];
+
+export const quotes: Quote[] = [
+  {
+    id: 'quote-1',
+    text: 'The best way to get started is to quit talking and begin doing.',
+    posX: 0,
+    posY: 0,
+    boardId: board.id,
+  },
+  {
+    id: 'quote-2',
+    text: 'Success is not in what you have, but who you are.',
+    posX: 1,
+    posY: 0,
+    boardId: board.id,
+  },
+  {
+    id: 'quote-3',
+    text: 'Opportunities don’t happen, you create them.',
+    posX: 0,
+    posY: 1,
+    boardId: board.id,
+  },
+  {
+    id: 'quote-4',
+    text: 'Don’t watch the clock; do what it does. Keep going.',
+    posX: 1,
+    posY: 1,
+    boardId: board.id,
+  },
+];

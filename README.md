@@ -15,30 +15,32 @@
 
 <hr>
 
-## 🛠️ Getting started
+## 🛠️ Quick start
 
 ### Installation
 ```bash
 $ pnpm install
 $ cp .env.example .env
-````
+```
+Fill in the `.env` file with your environment variables.
 
-Fill in the `.env` file with your environment variables. Then init the database:
+Then, if a database is already set up, you can generate the Prisma client and push the schema to the database:
+
 ```bash
-$ pnpm prisma db push
-$ pnpm run seed
+$ pnpm run db:push		# Applies migrations to the database
+$ pnpm run db:generate	# Generate Prisma client
 ```
 
-### Development
+If you need to seed the database with initial data (located in `prisma/seed/data.ts`), you can run:
 ```bash
-$ pnpm run dev 
-#or, with vercel
-$ vercel dev
+$ pnpm run db:seed		# Seed the database with initial data
 ```
+> ⚠ Warning: The seed script will delete all existing data in the database before inserting new data. Use with caution!
 
-### Production
+### Migration
+If you need to create a new migration, first modify the Prisma schema in `prisma/schema.prisma`. Then, you can edit your migration with the following commands:
 ```bash
-$ vercel --prod
-```	
-Or simply push to the main branch, if you have the vercel integration enabled.
-> **Note:** Don't forget to set the environment variables in the vercel dashboard.
+$ pnpm run db:migration --<name>	# Create a new migration, without applying it
+$ pnpm run db:push					# Apply migrations to the database
+$ pnpm run db:generate				# Generate Prisma client
+```

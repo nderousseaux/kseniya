@@ -3,11 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "prisma generate && next build",
-    "start": "next start",
-    "lint": "next lint",
-    "seed": "ts-node -r tsconfig-paths/register --compiler-options '{\"module\":\"commonjs\"}' prisma/seed/seed.ts"
+    "db:migration": "prisma migrate dev --create-only --name",
+    "db:push": "prisma migrate deploy",
+    "db:generate": "prisma generate",
+    "db:seed": "ts-node -r tsconfig-paths/register --compiler-options '{\"module\":\"commonjs\"}' prisma/seed/seed.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

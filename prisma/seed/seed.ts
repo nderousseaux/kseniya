@@ -1,40 +1,54 @@
 import { PrismaClient } from '@prisma/client';
-
-import type { Board } from '@/src/types/Board';
-import type { Group } from '@/src/types/Group';
-import type { Item } from '@/src/types/Item';
+import { board, groups, items, quotes } from '@/prisma/seed/data';
 
 const prisma = new PrismaClient();
 
-// Load the seed data from TypeScript file
-import data from '@/prisma/seed/data';
-
 async function main() {
-  // Clear existing data
-  await prisma.item.deleteMany();
-  await prisma.group.deleteMany();
-  await prisma.appData.deleteMany();
+  // Clean up existing data
+  await prisma.quote.deleteMany({});
+  await prisma.item.deleteMany({});
+  await prisma.group.deleteMany({});
+  await prisma.board.deleteMany({});
 
-  // Insert new data
-  await prisma.appData.create({
-    data: {
-      title: data.title,
-      description: data.description,
-      groups: {
-        create: (data.groups ?? []).map((g: Group) => ({
-          name: g.name,
-          quote: g.quote,
-          items: {
-            create: (g.items ?? []).map((i: Item) => ({
-              name: i.name,
-              description: i.description,
-              img: i.img,
-            })),
-          },
-        })),
-      },
-    },
+  // Create board
+  await prisma.board.create({
+    data: board,
   });
+
+  // Create groups
+  for (const group of groups) {
+    await prisma.group.create({
+      data: group,
+    });
+  }
+
+  // Create items
+  for (const item of items) {
+    // Fix: use correct type and property name for image field
+    const { id, name, description, groupId } = item;
+    // 'image' is the correct field name per schema
+    const image = (item as { image?: Buffer | null }).image ?? null;
+    if (id && name && description && groupId) {
+      await prisma.item.create({
+        data: {
+          id,
+          name,
+          description,
+          groupId,
+          image,
+        },
+      });
+    }
+  }
+
+  // Create quotes
+  for (const quote of quotes) {
+    await prisma.quote.create({
+      data: quote,
+    });
+  }
+
+  console.log('Database seeded successfully!');
 }
 
 main()
