@@ -44,3 +44,22 @@ $ pnpm run db:migration --<name>	# Create a new migration, without applying it
 $ pnpm run db:push					# Apply migrations to the database
 $ pnpm run db:generate				# Generate Prisma client
 ```
+
+## 🏛️ Architecure
+The project is structured as follows:
+```
+.
+├── prisma/                 # Prisma schema and migrations
+│   ├── schema.prisma       # Schema file
+│   ├── migrations/         # Migrations
+│   └── seed/               # Seed data for the database
+├── public/                 
+├── src/
+│   └── services/			# Service layer for business logic
+│       ├── foo/            
+│       │   ├── index.ts    # Custom business function for Foo
+│       │   └── crud.ts     # Simple CRUD operations for Foo
+│       └── ...            
+├── .env                    # Environment variables
+└── .env.example            # Example environment variables
+```
