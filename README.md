@@ -37,6 +37,11 @@ $ pnpm run db:seed		# Seed the database with initial data
 ```
 > ⚠ Warning: The seed script will delete all existing data in the database before inserting new data. Use with caution!
 
+Now, you can start the development server:
+```bash
+$ pnpm run dev
+```
+
 ### Migration
 If you need to create a new migration, first modify the Prisma schema in `prisma/schema.prisma`. Then, you can edit your migration with the following commands:
 ```bash
@@ -44,6 +49,16 @@ $ pnpm run db:migration --<name>	# Create a new migration, without applying it
 $ pnpm run db:push					# Apply migrations to the database
 $ pnpm run db:generate				# Generate Prisma client
 ```
+
+### Deployment
+To deploy the project, you can use Vercel. Make sure to set up the environment variables in the Vercel dashboard, matching those in your `.env` file.
+
+```bash
+$ vercel --prod
+```
+
+Or simply push on the main branch, if you have set up Vercel to automatically deploy from your repository.
+
 
 ## 🏛️ Architecure
 The project is structured as follows:

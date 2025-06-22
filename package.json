@@ -6,7 +6,10 @@
     "db:migration": "prisma migrate dev --create-only --name",
     "db:push": "prisma migrate deploy",
     "db:generate": "prisma generate",
-    "db:seed": "ts-node -r tsconfig-paths/register --compiler-options '{\"module\":\"commonjs\"}' prisma/seed/index.ts"
+    "db:seed": "ts-node -r tsconfig-paths/register --compiler-options '{\"module\":\"commonjs\"}' prisma/seed/index.ts",
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "lint": "next lint"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
