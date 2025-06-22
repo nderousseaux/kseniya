@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { board, groups, items, quotes } from '@/prisma/seed/data';
+import { board, groups, items, quotes } from "./data";
 
 const prisma = new PrismaClient();
 
