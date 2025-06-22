@@ -70,11 +70,13 @@ The project is structured as follows:
 │   └── seed/               # Seed data for the database
 ├── public/                 
 ├── src/
+│   ├── app/                # Pages routes
 │   └── services/			# Service layer for business logic
 │       ├── foo/            
 │       │   ├── index.ts    # Custom business function for Foo
 │       │   └── crud.ts     # Simple CRUD operations for Foo
 │       └── ...            
+|   └── types/              # Type definitions
 ├── .env                    # Environment variables
 └── .env.example            # Example environment variables
 ```

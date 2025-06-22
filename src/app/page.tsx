@@ -1,11 +1,5 @@
 import board from '@/src/services/board';
-
-interface Board {
-  id: string;
-  title: string;
-  description: string;
-  password: string | null;
-}
+import { Board } from '@/src/types';
 
 export default async function Home() {
   const boards: Board[] = await board.getAll();
