@@ -1,4 +1,4 @@
-import board from '@/src/services/board';
+import { board } from '@/src/services';
 import { Board } from '@/src/types';
 
 export default async function Home() {
