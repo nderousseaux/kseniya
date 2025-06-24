@@ -1,7 +1,7 @@
 // View of a board
 import { notFound } from "next/navigation";
 import InfiniteCanvas from "@/src/components/InfiniteCanvas";
-import BoardCard from "@/src/components/BoardCard";
+import BoardCard from "@/src/components/Board/BoardCard";
 import { board } from "@/src/services";
 
 export default async function Page(props: {params: Promise<{id: string}>}) {

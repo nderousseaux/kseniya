@@ -2,6 +2,8 @@
 import { Board } from '@/src/types';
 import { board } from '@/src/services';
 
+import Title from './Title';
+
 export default async function BoardCard(props: { id: string }) {
   const { id } = props;
 
@@ -10,7 +12,7 @@ export default async function BoardCard(props: { id: string }) {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-gray-800">{b.title}</h1>
+      <Title title={b.title} description={b.description} />
     </>
   );
 }
