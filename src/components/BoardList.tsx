@@ -7,21 +7,26 @@ export default async function BoardList() {
   return (
     <div className="space-y-4">
       {boards.map((board) => (
-        <div key={board.id} className="p-4 bg-white shadow rounded-lg flex justify-between items-center">
-          <div>
-            <h2 className="text-xl font-semibold text-gray-900">{board.title} <span className="text-gray-400 text-sm">#{board.id}</span></h2>
-            <p className="text-gray-600">{board.description}</p>
-          </div>
-            <button className="ml-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-            Go to Board
-            </button>
-        </div>
+      <div key={board.id} className="p-4 bg-white shadow rounded-lg flex justify-between items-center">
+      <div>
+      <h2 className="text-xl font-semibold text-gray-900">{board.title} <span className="text-gray-400 text-sm">#{board.id}</span></h2>
+      <p className="text-gray-600">{board.description}</p>
+      </div>
+      <div className="flex space-x-2">
+      <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+        Go to Board
+      </button>
+      <button className="px-3 py-1 text-gray-600 text-sm hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded transition-colors">
+        Edit Form
+      </button>
+      </div>
+      </div>
       ))}
 
       <div className="mt-8 text-center">
-        <p className="text-sm text-gray-500">
-          Boards found: <span className="font-medium">{boards.length}</span>
-        </p>
+      <p className="text-sm text-gray-500">
+      Boards found: <span className="font-medium">{boards.length}</span>
+      </p>
       </div>      
     </div>
   );
