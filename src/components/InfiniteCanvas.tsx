@@ -3,15 +3,15 @@
 import React from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
+import Background from '@/src/components/Background';
+
 interface InfiniteCanvasProps {
   children: React.ReactNode;
 }
 
 export default function InfiniteCanvas({ children }: InfiniteCanvasProps) {
   return (
-    <div
-      className="w-screen h-screen overflow-hidden bg-[#fafafa] [background-image:radial-gradient(circle,#bbb_1px,transparent_1.5px),radial-gradient(circle,#eee_1px,transparent_1.5px)] [background-size:20px_20px] [background-position:0_0,10px_10px]"
-    >
+    <Background>
       <TransformWrapper
       panning={{ excluded: ['text-selectable'], velocityDisabled: true }}
       wheel={{ excluded: ['text-selectable'] }}
@@ -26,6 +26,6 @@ export default function InfiniteCanvas({ children }: InfiniteCanvasProps) {
         </div>
       </TransformComponent>
       </TransformWrapper>
-    </div>
+    </Background>
   );
 }

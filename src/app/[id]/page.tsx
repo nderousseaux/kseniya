@@ -10,7 +10,9 @@ export default async function Page(props: {params: Promise<{id: string}>}) {
   
   // Vérifier si le board existe
   const b = await board.getById(id);
-  if (!b) notFound();
+  if (!b) {
+    notFound();
+  }
   
   return (
     <InfiniteCanvas>
