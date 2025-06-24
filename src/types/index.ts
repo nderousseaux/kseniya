@@ -4,4 +4,4 @@ import { Group } from './group';
 export type {
     Board,
     Group
-}w
+};
