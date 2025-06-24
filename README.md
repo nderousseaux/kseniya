@@ -72,10 +72,11 @@ The project is structured as follows:
 ├── src/
 │   ├── app/                # Pages routes
 │   └── services/			# Service layer for business logic
-│       ├── foo/            
-│       │   ├── index.ts    # Custom business function for Foo
-│       │   └── crud.ts     # Simple CRUD operations for Foo
-│       └── ...            
+│   │   ├── foo/            
+│   │   │   ├── index.ts    # Custom business function for Foo
+│   │   │   └── crud.ts     # Simple CRUD operations for Foo
+│   │   └── ...            
+│   ├── components/         # Reusable components
 |   └── types/              # Type definitions
 ├── .env                    # Environment variables
 └── .env.example            # Example environment variables

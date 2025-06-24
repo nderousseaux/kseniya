@@ -3,13 +3,13 @@ import { QuoteSchema } from './index';
 
 const prisma = new PrismaClient();
 
-async function getAll() {
-  return prisma.quote.findMany();
+async function getAll(options?: { include?: Record<string, boolean> }) {
+  return prisma.quote.findMany(options);
 }
 
-async function getById(id: string) {
+async function getById(id: string, options?: { include?: Record<string, boolean> }) {
   if (!id) throw new Error('Missing id');
-  return prisma.quote.findUnique({ where: { id } });
+  return prisma.quote.findUnique({ where: { id }, ...options });
 }
 
 async function create(data: unknown) {

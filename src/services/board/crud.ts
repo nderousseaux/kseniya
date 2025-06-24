@@ -3,13 +3,13 @@ import { BoardSchema } from './index';
 
 const prisma = new PrismaClient();
 
-async function getAll() {
-  return prisma.board.findMany();
+async function getAll(options?: { include?: Record<string, boolean> }) {
+  return prisma.board.findMany(options);
 }
 
-async function getById(id: string) {
+async function getById(id: string, options?: { include?: Record<string, boolean> }) {
   if (!id) throw new Error('Missing id');
-  return prisma.board.findUnique({ where: { id } });
+  return prisma.board.findUnique({ where: { id } , ...options });
 }
 
 async function create(data: unknown) {

@@ -5,7 +5,7 @@ import { z } from 'zod';
 import quote from './crud';
 
 export const QuoteSchema = z.object({
-  id: z.string().optional(),
+  id: z.string(),
   text: z.string(),
   posX: z.number(),
   posY: z.number(),

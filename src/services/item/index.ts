@@ -5,11 +5,11 @@ import { z } from 'zod';
 import item from './crud';
 
 export const ItemSchema = z.object({
-  id: z.string().optional(),
+  id: z.string(),
   name: z.string(),
   description: z.string(),
   groupId: z.string(),
-  image: z.instanceof(Buffer).optional().nullable(),
+  image: z.any().optional().nullable(), // Pour les données binaires (Bytes)
 });
 
 export default item;

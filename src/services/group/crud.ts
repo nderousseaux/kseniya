@@ -3,13 +3,13 @@ import { GroupSchema } from './index';
 
 const prisma = new PrismaClient();
 
-async function getAll() {
-  return prisma.group.findMany();
+async function getAll(options?: { include?: Record<string, boolean> }) {
+  return prisma.group.findMany(options);
 }
 
-async function getById(id: string) {
+async function getById(id: string, options?: { include?: Record<string, boolean> }) {
   if (!id) throw new Error('Missing id');
-  return prisma.group.findUnique({ where: { id } });
+  return prisma.group.findUnique({ where: { id }, ...options });
 }
 
 async function create(data: unknown) {
