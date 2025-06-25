@@ -21,7 +21,7 @@ const CloseIcon = () => (
 
 // Composant pour l'en-tête de la modal
 const ModalHeader = ({ title, onClose }: { title: string; onClose: () => void }) => (
-  <div className="flex justify-between items-center p-6 border-b border-gray-200 bg-white sticky top-0 z-10 rounded-t-lg">
+  <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-white sticky top-0 z-10 rounded-t-lg">
     <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
     <button
       onClick={onClose}
@@ -38,13 +38,13 @@ const ItemImage = ({ image, name }: { image: Buffer | null | undefined; name: st
   if (!image) return null;
 
   return (
-    <div className="mb-6">
+    <div className="mb-4">
       <Image 
         src={`data:image/jpeg;base64,${Buffer.from(image).toString('base64')}`}
         alt={name}
-        width={800}
-        height={600}
-        className="w-full h-auto max-h-[50vh] object-contain rounded-lg shadow-md"
+        width={600}
+        height={400}
+        className="w-full h-auto max-h-[40vh] object-contain rounded-lg shadow-md"
       />
     </div>
   );
@@ -84,12 +84,12 @@ export default function ItemModal({ item, isOpen, onClose }: ItemModalProps) {
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[85vh] overflow-y-auto"
+        className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[70vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <ModalHeader title={item.name} onClose={onClose} />
         
-        <div className="p-6">
+        <div className="p-4">
           <ItemImage image={item.image} name={item.name} />
           <ItemDescription description={item.description} />
           {!hasContent && <EmptyContent />}
