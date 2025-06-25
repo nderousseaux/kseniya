@@ -1,5 +1,5 @@
 // View of a board
-import { Board } from '@/src/types';
+import Board from '@/src/types/board';
 import { board } from '@/src/services';
 
 import GroupCard from './GroupCard';

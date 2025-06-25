@@ -1,13 +1,11 @@
 // View of an individual item
 'use client';
 
-import { z } from 'zod';
 import Image from 'next/image';
 import { useState } from 'react';
-import { ItemSchema } from '@/src/services/item';
-import ItemModal from './ItemModal';
 
-type Item = z.infer<typeof ItemSchema>;
+import Item from '@/src/types/item';
+import ItemModal from './ItemModal';
 
 export default function ItemCard(props: { item: Item }) {
   const { item } = props;

@@ -2,8 +2,9 @@
 
 import Image from 'next/image';
 import { createPortal } from 'react-dom';
-import { Item } from '@/src/types';
-import { useModalBehavior } from '@/src/hooks';
+
+import Item from '@/src/types/item';
+import useModalBehavior from '@/src/hooks/useModalBehavior';
 
 interface ItemModalProps {
   item: Item;

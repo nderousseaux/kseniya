@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Board } from '@/src/types';
+import Board from '@/src/types/board';
 import { board } from '@/src/services';
 
 export default async function BoardList() {

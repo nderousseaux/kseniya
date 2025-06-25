@@ -1,5 +1,5 @@
 // View of a group
-import { Group } from '@/src/types';
+import Group from '@/src/types/group';
 import ItemCard from './ItemCard';
 
 export default async function GroupCard(props: { group: Group }) {
