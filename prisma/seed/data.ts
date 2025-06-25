@@ -1,6 +1,11 @@
 // Exemple of a board, for seeding the prisma database
 
 import { Board, Group, Item, Quote } from '@prisma/client';
+import * as fs from 'fs';
+import * as path from 'path';
+
+// Load image as Buffer and convert to base64 DataURL
+const imageBuffer = new Uint8Array(fs.readFileSync(path.join(__dirname, 'img.jpg')));
 
 export const board: Board = {
   id: 'board-1',
@@ -48,7 +53,7 @@ export const items: Partial<Item>[] = [
     name: `Alpha Item ${i+1}`,
     description: `Description for Alpha Item ${i+1}`.repeat(Math.floor(Math.random() * 3) + 1),
     groupId: 'group-1',
-    image: null,
+    image: Math.random() < 0.1 ? imageBuffer : null, // 1 in 10 chance
   })),
   // Group 2: 8 items
   ...Array.from({ length: 8 }, (_, i) => ({
@@ -56,7 +61,7 @@ export const items: Partial<Item>[] = [
     name: `Beta Item ${i+1}`,
     description: `Description for Beta Item ${i+1}`.repeat(Math.floor(Math.random() * 3) + 1),
     groupId: 'group-2',
-    image: null,
+    image: Math.random() < 0.1 ? imageBuffer : null, // 1 in 10 chance
   })),
   // Group 3: 6 items
   ...Array.from({ length: 6 }, (_, i) => ({
@@ -64,7 +69,7 @@ export const items: Partial<Item>[] = [
     name: `Gamma Item ${i+1}`,
     description: `Description for Gamma Item ${i+1}`.repeat(Math.floor(Math.random() * 3) + 1),
     groupId: 'group-3',
-    image: null,
+    image: Math.random() < 0.1 ? imageBuffer : null, // 1 in 10 chance
   })),
   // Group 4: 9 items
   ...Array.from({ length: 9 }, (_, i) => ({
@@ -72,7 +77,7 @@ export const items: Partial<Item>[] = [
     name: `Delta Item ${i+1}`,
     description: `Description for Delta Item ${i+1}`.repeat(Math.floor(Math.random() * 3) + 1),
     groupId: 'group-4',
-    image: null,
+    image: Math.random() < 0.1 ? imageBuffer : null, // 1 in 10 chance
   })),
 ];
 
