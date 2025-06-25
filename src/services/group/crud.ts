@@ -1,19 +1,19 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { GroupSchema } from './index';
 
 const prisma = new PrismaClient();
 
-async function getAll(options?: { include?: Record<string, boolean> }) {
+async function getAll(options?: { include?: Prisma.GroupInclude }) {
   return prisma.group.findMany(options);
 }
 
-async function getById(id: string, options?: { include?: Record<string, boolean> }) {
+async function getById(id: string, options?: { include?: Prisma.GroupInclude }) {
   if (!id) throw new Error('Missing id');
   return prisma.group.findUnique({ where: { id }, ...options });
 }
 
 async function create(data: unknown) {
-  const parse = GroupSchema.safeParse(data);
+  const parse = GroupSchema.omit({ items: true }).safeParse(data);
   if (!parse.success) throw parse.error;
   return prisma.group.create({ data: parse.data });
 }
@@ -23,7 +23,7 @@ async function update(data: unknown) {
     throw new Error('Missing id');
   }
   const { id, ...updateData } = data as { id: string } & Record<string, unknown>;
-  const parse = GroupSchema.omit({ id: true }).safeParse(updateData);
+  const parse = GroupSchema.omit({ id: true, items: true }).safeParse(updateData);
   if (!parse.success) throw parse.error;
   return prisma.group.update({ where: { id }, data: parse.data });
 }

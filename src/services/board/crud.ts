@@ -1,19 +1,19 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { BoardSchema } from './index';
 
 const prisma = new PrismaClient();
 
-async function getAll(options?: { include?: Record<string, boolean> }) {
+async function getAll(options?: { include?: Prisma.BoardInclude }) {
   return prisma.board.findMany(options);
 }
 
-async function getById(id: string, options?: { include?: Record<string, boolean> }) {
+async function getById(id: string, options?: { include?: Prisma.BoardInclude }) {
   if (!id) throw new Error('Missing id');
   return prisma.board.findUnique({ where: { id } , ...options });
 }
 
 async function create(data: unknown) {
-  const parse = BoardSchema.safeParse(data);
+  const parse = BoardSchema.omit({ groups: true, quotes: true }).safeParse(data);
   if (!parse.success) throw parse.error;
   return prisma.board.create({ data: parse.data });
 }
@@ -23,7 +23,7 @@ async function update(data: unknown) {
     throw new Error('Missing id');
   }
   const { id, ...updateData } = data as { id: string } & Record<string, unknown>;
-  const parse = BoardSchema.omit({ id: true }).safeParse(updateData);
+  const parse = BoardSchema.omit({ id: true, groups: true, quotes: true }).safeParse(updateData);
   if (!parse.success) throw parse.error;
   return prisma.board.update({ where: { id }, data: parse.data });
 }

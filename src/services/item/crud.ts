@@ -1,13 +1,13 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { ItemSchema } from './index';
 
 const prisma = new PrismaClient();
 
-async function getAll(options?: { include?: Record<string, boolean> }) {
+async function getAll(options?: { include?: Prisma.ItemInclude }) {
   return prisma.item.findMany(options);
 }
 
-async function getById(id: string, options?: { include?: Record<string, boolean> }) {
+async function getById(id: string, options?: { include?: Prisma.ItemInclude }) {
   if (!id) throw new Error('Missing id');
   return prisma.item.findUnique({ where: { id }, ...options });
 }

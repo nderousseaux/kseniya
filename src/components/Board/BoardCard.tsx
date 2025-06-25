@@ -8,7 +8,7 @@ import Title from './Title';
 export default async function BordCard(props: { id: string }) {
   const { id } = props;
 
-  const b: Board | null = await board.getById(id, { include: { groups: true } });
+  const b: Board | null = await board.getById(id, { include: { groups: { include: { items: true } } } });
   if (!b) throw new Error('Board not found');
 
   return (

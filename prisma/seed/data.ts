@@ -14,29 +14,29 @@ export const groups: Group[] = [
     id: 'group-1',
     name: 'Group Alpha',
     boardId: board.id,
-    posX: -150,
-    posY: -150,
+    posX: -350,
+    posY: -350,
   },
   {
     id: 'group-2',
     name: 'Group Beta',
     boardId: board.id,
-    posX: 150,
-    posY: -150,
+    posX: 350,
+    posY: -350,
   },
   {
     id: 'group-3',
     name: 'Group Gamma',
     boardId: board.id,
-    posX: -150,
-    posY: 150,
+    posX: -350,
+    posY: 350,
   },
   {
     id: 'group-4',
     name: 'Group Delta',
     boardId: board.id,
-    posX: 150,
-    posY: 150,
+    posX: 350,
+    posY: 350,
   },
 ];
 
@@ -46,7 +46,7 @@ export const items: Partial<Item>[] = [
   ...Array.from({ length: 7 }, (_, i) => ({
     id: `item-1-${i+1}`,
     name: `Alpha Item ${i+1}`,
-    description: `Description for Alpha Item ${i+1}`,
+    description: `Description for Alpha Item ${i+1}`.repeat(Math.floor(Math.random() * 3) + 1),
     groupId: 'group-1',
     image: null,
   })),
@@ -54,7 +54,7 @@ export const items: Partial<Item>[] = [
   ...Array.from({ length: 8 }, (_, i) => ({
     id: `item-2-${i+1}`,
     name: `Beta Item ${i+1}`,
-    description: `Description for Beta Item ${i+1}`,
+    description: `Description for Beta Item ${i+1}`.repeat(Math.floor(Math.random() * 3) + 1),
     groupId: 'group-2',
     image: null,
   })),
@@ -62,7 +62,7 @@ export const items: Partial<Item>[] = [
   ...Array.from({ length: 6 }, (_, i) => ({
     id: `item-3-${i+1}`,
     name: `Gamma Item ${i+1}`,
-    description: `Description for Gamma Item ${i+1}`,
+    description: `Description for Gamma Item ${i+1}`.repeat(Math.floor(Math.random() * 3) + 1),
     groupId: 'group-3',
     image: null,
   })),
@@ -70,11 +70,12 @@ export const items: Partial<Item>[] = [
   ...Array.from({ length: 9 }, (_, i) => ({
     id: `item-4-${i+1}`,
     name: `Delta Item ${i+1}`,
-    description: `Description for Delta Item ${i+1}`,
+    description: `Description for Delta Item ${i+1}`.repeat(Math.floor(Math.random() * 3) + 1),
     groupId: 'group-4',
     image: null,
   })),
 ];
+
 
 export const quotes: Quote[] = [
   {
