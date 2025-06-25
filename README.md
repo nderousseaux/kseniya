@@ -71,13 +71,14 @@ The project is structured as follows:
 ├── public/                 
 ├── src/
 │   ├── app/                # Pages routes
-│   └── services/			# Service layer for business logic
+│   ├── services/			# Service layer for business logic
 │   │   ├── foo/            
 │   │   │   ├── index.ts    # Custom business function for Foo
 │   │   │   └── crud.ts     # Simple CRUD operations for Foo
 │   │   └── ...            
 │   ├── components/         # Reusable components
-|   └── types/              # Type definitions
+│   ├── hooks/              # Custom React hooks
+│   └── types/              # Type definitions
 ├── .env                    # Environment variables
 └── .env.example            # Example environment variables
 ```
