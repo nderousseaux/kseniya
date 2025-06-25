@@ -24,7 +24,7 @@ $ cp .env.example .env
 ```
 Fill in the `.env` file with your environment variables.
 
-Then, if a database is already set up, you can generate the Prisma client and push the schema to the database:
+Then, initialize the database with Prisma, even if the database is already created:
 
 ```bash
 $ pnpm run db:push		# Applies migrations to the database
