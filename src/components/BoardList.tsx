@@ -18,9 +18,9 @@ export default async function BoardList() {
       <Link href={`/${board.id}`} className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors inline-block text-center no-underline">
         Go to Board
       </Link>
-      <button className="px-3 py-1 text-gray-600 text-sm hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded transition-colors">
+      <Link href={`/${board.id}/edit`} className="px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors inline-block text-center no-underline text-gray-600">
         Edit Form
-      </button>
+      </Link>
       </div>
       </div>
       ))}

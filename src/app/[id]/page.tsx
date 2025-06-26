@@ -5,8 +5,7 @@ import BoardCard from "@/src/components/Board/BoardCard";
 import { board } from "@/src/services";
 
 export default async function Page(props: {params: Promise<{id: string}>}) {
-  const params = await props.params;
-  const id = params.id;
+  const id = (await props.params).id;
   
   // Vérifier si le board existe
   const b = await board.getById(id);
