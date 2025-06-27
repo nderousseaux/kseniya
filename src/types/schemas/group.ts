@@ -7,6 +7,7 @@ export const GroupSchema = z.object({
   boardId: z.string(),
   posX: z.number(),
   posY: z.number(),
+  order: z.number().default(0),
   items: z.array(ItemSchema).optional(),
 });
 

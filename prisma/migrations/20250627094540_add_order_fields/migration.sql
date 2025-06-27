@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "Group" ADD COLUMN     "order" INTEGER NOT NULL DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE "Item" ADD COLUMN     "order" INTEGER NOT NULL DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE "Quote" ADD COLUMN     "order" INTEGER NOT NULL DEFAULT 0;

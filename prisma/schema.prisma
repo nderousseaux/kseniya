@@ -24,6 +24,7 @@ model Group {
   items     Item[]
   posX      Int
   posY      Int
+  order     Int      @default(0)
 }
 
 model Item {
@@ -33,6 +34,7 @@ model Item {
   groupId     String
   group       Group    @relation(fields: [groupId], references: [id])
   image       Bytes?
+  order       Int      @default(0)
 }
 
 model Quote {
@@ -42,4 +44,5 @@ model Quote {
   posY      Int
   boardId   String
   board     Board    @relation(fields: [boardId], references: [id])
+  order     Int      @default(0)
 }

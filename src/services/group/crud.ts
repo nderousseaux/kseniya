@@ -4,7 +4,10 @@ import { GroupSchema } from '@/src/types/schemas';
 const prisma = new PrismaClient();
 
 async function getAll(options?: { include?: Prisma.GroupInclude }) {
-  return prisma.group.findMany(options);
+  return prisma.group.findMany({
+    ...options,
+    orderBy: { order: 'asc' }
+  });
 }
 
 async function getById(id: string, options?: { include?: Prisma.GroupInclude }) {
@@ -33,5 +36,27 @@ async function remove(id: string) {
   return prisma.group.delete({ where: { id } });
 }
 
-const group = { getAll, getById, create, update, remove };
+async function reorder(boardId: string, orderedIds: string[]) {
+  if (!boardId || !orderedIds?.length) throw new Error('Missing boardId or orderedIds');
+  
+  const operations = orderedIds.map((id, index) =>
+    prisma.group.update({
+      where: { id },
+      data: { order: index }
+    })
+  );
+  
+  return prisma.$transaction(operations);
+}
+
+async function getByBoardId(boardId: string, options?: { include?: Prisma.GroupInclude }) {
+  if (!boardId) throw new Error('Missing boardId');
+  return prisma.group.findMany({
+    where: { boardId },
+    orderBy: { order: 'asc' },
+    ...options
+  });
+}
+
+const group = { getAll, getById, create, update, remove, reorder, getByBoardId };
 export default group;

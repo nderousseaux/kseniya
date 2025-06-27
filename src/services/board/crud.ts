@@ -9,7 +9,39 @@ async function getAll(options?: { include?: Prisma.BoardInclude }) {
 
 async function getById(id: string, options?: { include?: Prisma.BoardInclude }) {
   if (!id) throw new Error('Missing id');
-  return prisma.board.findUnique({ where: { id } , ...options });
+  
+  // Si on inclut les relations, on doit trier par ordre
+  if (options?.include) {
+    const modifiedOptions = { ...options };
+    
+    // Trier les groupes par ordre et leurs items
+    if (modifiedOptions.include.groups) {
+      modifiedOptions.include.groups = {
+        ...modifiedOptions.include.groups,
+        orderBy: { order: 'asc' },
+        include: modifiedOptions.include.groups.include ? {
+          ...modifiedOptions.include.groups.include,
+          items: modifiedOptions.include.groups.include.items ? {
+            orderBy: { order: 'asc' }
+          } : false
+        } : undefined
+      };
+    }
+    
+    // Trier les quotes par ordre
+    if (modifiedOptions.include.quotes) {
+      modifiedOptions.include.quotes = {
+        orderBy: { order: 'asc' }
+      };
+    }
+    
+    return prisma.board.findUnique({ 
+      where: { id }, 
+      ...modifiedOptions 
+    });
+  }
+  
+  return prisma.board.findUnique({ where: { id }, ...options });
 }
 
 async function create(data: unknown) {

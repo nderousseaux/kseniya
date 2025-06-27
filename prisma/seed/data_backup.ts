@@ -1,6 +1,10 @@
 // Exemple of a board, for seeding the prisma database
 
-import { Board, Group, Item, Quote } from '@prisma/client';
+import { Board, Group, Item, Quote } from '@prisma/clie    text: 'Opportunities don't happen, you create them.',
+    posX: 400,
+    posY: -50,
+    boardId: board.id,
+    order: 2,
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -89,6 +93,7 @@ export const items: Partial<Item>[] = [
   })),
 ];
 
+
 export const quotes: Quote[] = [
   {
     id: 'quote-1',
@@ -108,18 +113,16 @@ export const quotes: Quote[] = [
   },
   {
     id: 'quote-3',
-    text: 'Opportunities don\'t happen, you create them.',
+    text: 'Opportunities don’t happen, you create them.',
     posX: 400,
     posY: -50,
     boardId: board.id,
-    order: 2,
   },
   {
     id: 'quote-4',
-    text: 'Don\'t watch the clock; do what it does. Keep going.',
+    text: 'Don’t watch the clock; do what it does. Keep going.',
     posX: 400,
     posY: 50,
     boardId: board.id,
-    order: 3,
   },
 ];

@@ -4,11 +4,12 @@ import { useState, useTransition } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Board from '@/src/types/board';
 import { updateBoard } from '@/src/services/board/actions';
-import { updateGroup, deleteGroup, createGroup } from '@/src/services/group/actions';
-import { updateItem, deleteItem, createItem } from '@/src/services/item/actions';
-import { updateQuote, deleteQuote, createQuote } from '@/src/services/quote/actions';
+import { updateGroup, deleteGroup, createGroup, reorderGroups } from '@/src/services/group/actions';
+import { updateItem, deleteItem, createItem, reorderItems } from '@/src/services/item/actions';
+import { updateQuote, deleteQuote, createQuote, reorderQuotes } from '@/src/services/quote/actions';
+import DraggableList from './DraggableList';
 
-type EditMode = 'menu' | 'board' | 'groups' | 'group' | 'item' | 'quotes' | 'quote' | 'create-group' | 'create-item' | 'create-quote';
+type EditMode = 'menu' | 'board' | 'groups' | 'group' | 'item' | 'quotes' | 'quote' | 'create-group' | 'create-item' | 'create-quote' | 'group-detail';
 
 interface EditData {
   board?: { id: string; title: string; description: string };
@@ -28,21 +29,9 @@ export default function EditPanel({ boardData }: EditPanelProps) {
   
   const [editMode, setEditMode] = useState<EditMode>('menu');
   const [selectedObject, setSelectedObject] = useState<string | null>(null);
+  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [editData, setEditData] = useState<EditData>({});
   const [isPending, startTransition] = useTransition();
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
-
-  const toggleGroupExpansion = (groupId: string) => {
-    setExpandedGroups(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(groupId)) {
-        newSet.delete(groupId);
-      } else {
-        newSet.add(groupId);
-      }
-      return newSet;
-    });
-  };
 
   const handleSave = async () => {
     if (!editMode || !editData) return;
@@ -94,10 +83,21 @@ export default function EditPanel({ boardData }: EditPanelProps) {
         if (result && !result.success) {
           alert(result.error || 'Échec de la sauvegarde');
         } else {
+          // Refresh the page to get updated data
+          router.refresh();
+          
           // Reset edit mode after successful save
-          setEditMode('menu');
-          setEditData({});
-          setSelectedObject(null);
+          if (editMode === 'create-item' && selectedGroup) {
+            // Rester dans la vue détail du groupe après création d'un item
+            setEditMode('group-detail');
+            setEditData({});
+            setSelectedObject(null);
+          } else {
+            setEditMode('menu');
+            setEditData({});
+            setSelectedObject(null);
+            setSelectedGroup(null);
+          }
         }
       } catch (error) {
         console.error('Failed to save:', error);
@@ -129,9 +129,20 @@ export default function EditPanel({ boardData }: EditPanelProps) {
         if (result && !result.success) {
           alert(result.error || 'Échec de la suppression');
         } else {
-          setEditMode('menu');
-          setEditData({});
-          setSelectedObject(null);
+          // Refresh the page to get updated data
+          router.refresh();
+          
+          if (editMode === 'item' && selectedGroup) {
+            // Rester dans la vue détail du groupe après suppression d'un item
+            setEditMode('group-detail');
+            setEditData({});
+            setSelectedObject(null);
+          } else {
+            setEditMode('menu');
+            setEditData({});
+            setSelectedObject(null);
+            setSelectedGroup(null);
+          }
         }
       } catch (error) {
         console.error('Failed to delete:', error);
@@ -142,6 +153,57 @@ export default function EditPanel({ boardData }: EditPanelProps) {
 
   const handleCancel = () => {
     router.push(`/${boardId}`);
+  };
+
+  const handleReorderGroups = async (orderedIds: string[]) => {
+    startTransition(async () => {
+      try {
+        const result = await reorderGroups(boardId, orderedIds);
+        if (result && !result.success) {
+          alert(result.error || 'Échec de la réorganisation');
+        } else {
+          // Refresh the page to get updated data
+          router.refresh();
+        }
+      } catch (error) {
+        console.error('Failed to reorder groups:', error);
+        alert('Échec de la réorganisation');
+      }
+    });
+  };
+
+  const handleReorderItems = async (groupId: string, orderedIds: string[]) => {
+    startTransition(async () => {
+      try {
+        const result = await reorderItems(groupId, orderedIds, boardId);
+        if (result && !result.success) {
+          alert(result.error || 'Échec de la réorganisation');
+        } else {
+          // Refresh the page to get updated data
+          router.refresh();
+        }
+      } catch (error) {
+        console.error('Failed to reorder items:', error);
+        alert('Échec de la réorganisation');
+      }
+    });
+  };
+
+  const handleReorderQuotes = async (orderedIds: string[]) => {
+    startTransition(async () => {
+      try {
+        const result = await reorderQuotes(boardId, orderedIds);
+        if (result && !result.success) {
+          alert(result.error || 'Échec de la réorganisation');
+        } else {
+          // Refresh the page to get updated data
+          router.refresh();
+        }
+      } catch (error) {
+        console.error('Failed to reorder quotes:', error);
+        alert('Échec de la réorganisation');
+      }
+    });
   };
 
   const renderEditForm = () => {
@@ -181,6 +243,8 @@ export default function EditPanel({ boardData }: EditPanelProps) {
 
     // Liste des groupes
     if (editMode === 'groups') {
+      const sortedGroups = boardData?.groups ? [...boardData.groups].sort((a, b) => a.order - b.order) : [];
+      
       return (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
@@ -190,7 +254,7 @@ export default function EditPanel({ boardData }: EditPanelProps) {
             >
               ←
             </button>
-            <h3 className="font-semibold text-gray-800">Sélectionner un groupe :</h3>
+            <h3 className="font-semibold text-gray-800">Groupes (glisser pour réorganiser) :</h3>
           </div>
           
           <button
@@ -203,80 +267,71 @@ export default function EditPanel({ boardData }: EditPanelProps) {
             ➕ Créer un nouveau groupe
           </button>
           
-          <div className="space-y-2">
-            {boardData?.groups && boardData.groups.length > 0 ? (
-              boardData.groups.map((group) => (
-                <div key={group.id} className="border border-gray-200 rounded-lg p-3 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => toggleGroupExpansion(group.id)}
-                        className="text-gray-500 hover:text-gray-700 transition-colors"
-                      >
-                        {expandedGroups.has(group.id) ? '▼' : '▶'}
-                      </button>
+          {sortedGroups.length > 0 && (
+            <DraggableList
+              items={sortedGroups}
+              onReorder={handleReorderGroups}
+                onEdit={(group) => {
+                  setEditMode('group');
+                  setSelectedObject(group.id);
+                  setEditData({ group: { id: group.id, name: group.name, posX: group.posX, posY: group.posY, boardId: group.boardId } });
+                }}
+                onDelete={(groupId) => {
+                  setSelectedObject(groupId);
+                  handleDelete();
+                }}
+                renderItem={(group) => (
+                <div 
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+                  onClick={() => {
+                    setSelectedGroup(group.id);
+                    setEditMode('group-detail');
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">📁</span>
+                    <div>
                       <h4 className="font-medium text-gray-800">{group.name}</h4>
-                      <span className="text-xs text-gray-500">
-                        ({group.items?.length || 0} item{(group.items?.length || 0) !== 1 ? 's' : ''})
-                      </span>
+                      <p className="text-xs text-gray-500">
+                        {group.items?.length || 0} item{(group.items?.length || 0) !== 1 ? 's' : ''}
+                      </p>
                     </div>
+                  </div>
+                  <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => {
                         setEditMode('group');
                         setSelectedObject(group.id);
                         setEditData({ group: { id: group.id, name: group.name, posX: group.posX, posY: group.posY, boardId: group.boardId } });
                       }}
-                      className="px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600 transition-colors"
+                      className="text-blue-500 hover:text-blue-700 text-sm p-1"
+                      title="Éditer le groupe"
                     >
-                      Éditer groupe
+                      ✏️
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedObject(group.id);
+                        handleDelete();
+                      }}
+                      className="text-red-500 hover:text-red-700 text-sm p-1"
+                      title="Supprimer le groupe"
+                    >
+                      🗑️
                     </button>
                   </div>
-                  
-                  {expandedGroups.has(group.id) && (
-                    <div className="space-y-2">
-                      {group.items && group.items.length > 0 && (
-                        <div className="space-y-1">
-                          <p className="text-xs text-gray-600">Items dans ce groupe :</p>
-                          <div className="grid gap-1">
-                            {group.items.map((item) => (
-                              <button
-                                key={item.id}
-                                onClick={() => {
-                                  setEditMode('item');
-                                  setSelectedObject(item.id);
-                                  setEditData({ item: { id: item.id, name: item.name, description: item.description, groupId: item.groupId } });
-                                }}
-                                className="w-full px-2 py-1 bg-purple-500 text-white rounded text-xs hover:bg-purple-600 transition-colors text-left"
-                              >
-                                📄 {item.name}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      <button
-                        onClick={() => {
-                          setEditMode('create-item');
-                          setEditData({ item: { name: '', description: '', groupId: group.id } });
-                        }}
-                        className="w-full px-2 py-1 bg-purple-300 text-purple-800 rounded text-xs hover:bg-purple-400 transition-colors"
-                      >
-                        ➕ Ajouter un item
-                      </button>
-                    </div>
-                  )}
                 </div>
-              ))
-            ) : (
-              <p className="text-gray-500 text-sm">Aucun groupe disponible</p>
-            )}
-          </div>
+              )}
+            />
+          )}
         </div>
       );
     }
 
     // Liste des quotes
     if (editMode === 'quotes') {
+      const sortedQuotes = boardData?.quotes ? [...boardData.quotes].sort((a, b) => a.order - b.order) : [];
+      
       return (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
@@ -286,7 +341,7 @@ export default function EditPanel({ boardData }: EditPanelProps) {
             >
               ←
             </button>
-            <h3 className="font-semibold text-gray-800">Sélectionner une citation :</h3>
+            <h3 className="font-semibold text-gray-800">Citations (glisser pour réorganiser) :</h3>
           </div>
           
           <button
@@ -299,23 +354,165 @@ export default function EditPanel({ boardData }: EditPanelProps) {
             ➕ Créer une nouvelle citation
           </button>
           
-          <div className="space-y-2">
-            {boardData?.quotes && boardData.quotes.length > 0 ? (
-              boardData.quotes.map((quote) => (
-                <button
-                  key={quote.id}
-                  onClick={() => {
-                    setEditMode('quote');
-                    setSelectedObject(quote.id);
-                    setEditData({ quote: { id: quote.id, text: quote.text, posX: quote.posX, posY: quote.posY, boardId: quote.boardId } });
-                  }}
-                  className="w-full px-3 py-2 bg-orange-500 text-white rounded text-sm hover:bg-orange-600 transition-colors text-left"
-                >
-                  💬 {quote.text.length > 30 ? quote.text.substring(0, 30) + '...' : quote.text}
-                </button>
-              ))
+          {sortedQuotes.length > 0 && (
+            <DraggableList
+              items={sortedQuotes}
+              onReorder={handleReorderQuotes}
+                onEdit={(quote) => {
+                  setEditMode('quote');
+                  setSelectedObject(quote.id);
+                  setEditData({ quote: { id: quote.id, text: quote.text, posX: quote.posX, posY: quote.posY, boardId: quote.boardId } });
+                }}
+                onDelete={(quoteId) => {
+                  setSelectedObject(quoteId);
+                  handleDelete();
+                }}
+                renderItem={(quote) => (
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <p className="text-sm">
+                      💬 {quote.text.length > 50 ? quote.text.substring(0, 50) + '...' : quote.text}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        setEditMode('quote');
+                        setSelectedObject(quote.id);
+                        setEditData({ quote: { id: quote.id, text: quote.text, posX: quote.posX, posY: quote.posY, boardId: quote.boardId } });
+                      }}
+                      className="text-blue-500 hover:text-blue-700 text-xs"
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedObject(quote.id);
+                        handleDelete();
+                      }}
+                      className="text-red-500 hover:text-red-700 text-xs"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </div>
+              )}
+            />
+          )}
+        </div>
+      );
+    }
+
+    // Vue détail d'un groupe (nouveau écran)
+    if (editMode === 'group-detail' && selectedGroup) {
+      const currentGroup = boardData?.groups?.find(g => g.id === selectedGroup);
+      if (!currentGroup) {
+        setEditMode('groups');
+        return null;
+      }
+      
+      const sortedItems = currentGroup.items ? [...currentGroup.items].sort((a, b) => a.order - b.order) : [];
+      
+      return (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                setEditMode('groups');
+                setSelectedGroup(null);
+              }}
+              disabled={isPending}
+              className={`text-xl ${
+                isPending 
+                  ? 'text-gray-300 cursor-not-allowed' 
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              ←
+            </button>
+            <div>
+              <h3 className="font-semibold text-gray-800">📁 {currentGroup.name}</h3>
+              <p className="text-xs text-gray-500">Gérer le contenu et les items</p>
+            </div>
+          </div>
+          
+          {/* Bouton pour éditer les infos du groupe */}
+          <button
+            onClick={() => {
+              setEditMode('group');
+              setSelectedObject(currentGroup.id);
+              setEditData({ group: { id: currentGroup.id, name: currentGroup.name, posX: currentGroup.posX, posY: currentGroup.posY, boardId: currentGroup.boardId } });
+            }}
+            className="w-full px-4 py-3 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
+          >
+            ✏️ Éditer les infos du groupe
+          </button>
+          
+          {/* Section des items */}
+          <div className="border-t pt-3">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="font-medium text-gray-700">Items ({sortedItems.length})</h4>
+              <button
+                onClick={() => {
+                  setEditMode('create-item');
+                  setEditData({ item: { name: '', description: '', groupId: currentGroup.id } });
+                }}
+                className="px-3 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 transition-colors"
+              >
+                ➕ Ajouter
+              </button>
+            </div>
+            
+            {sortedItems.length > 0 ? (
+              <DraggableList
+                items={sortedItems}
+                onReorder={(orderedIds) => handleReorderItems(currentGroup.id, orderedIds)}
+                onEdit={(item) => {
+                  setEditMode('item');
+                  setSelectedObject(item.id);
+                  setEditData({ item: { id: item.id, name: item.name, description: item.description, groupId: item.groupId } });
+                }}
+                onDelete={(itemId) => {
+                  setSelectedObject(itemId);
+                  handleDelete();
+                }}
+                renderItem={(item) => (
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex-1">
+                      <h5 className="text-sm font-medium text-gray-800">{item.name}</h5>
+                      <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                    </div>
+                    <div className="flex gap-2 ml-3">
+                      <button
+                        onClick={() => {
+                          setEditMode('item');
+                          setSelectedObject(item.id);
+                          setEditData({ item: { id: item.id, name: item.name, description: item.description, groupId: item.groupId } });
+                        }}
+                        className="text-blue-500 hover:text-blue-700 text-sm p-1"
+                        title="Éditer l'item"
+                      >
+                        ✏️
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSelectedObject(item.id);
+                          handleDelete();
+                        }}
+                        className="text-red-500 hover:text-red-700 text-sm p-1"
+                        title="Supprimer l'item"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+                )}
+              />
             ) : (
-              <p className="text-gray-500 text-sm">Aucune citation disponible</p>
+              <div className="text-center py-6 text-gray-500">
+                <p className="text-sm">Aucun item dans ce groupe</p>
+                <p className="text-xs mt-1">Cliquez sur &quot;Ajouter&quot; pour créer le premier item</p>
+              </div>
             )}
           </div>
         </div>
@@ -324,9 +521,12 @@ export default function EditPanel({ boardData }: EditPanelProps) {
 
     // Formulaires d'édition
     const getBackMode = () => {
-      if (editMode === 'item' || editMode === 'create-item') return 'groups';
+      if (editMode === 'item' || editMode === 'create-item') {
+        return selectedGroup ? 'group-detail' : 'groups';
+      }
       if (editMode === 'group' || editMode === 'create-group') return 'groups';
       if (editMode === 'quote' || editMode === 'create-quote') return 'quotes';
+      if (editMode === 'group-detail') return 'groups';
       return 'menu';
     };
 
@@ -339,6 +539,9 @@ export default function EditPanel({ boardData }: EditPanelProps) {
               setEditMode(backMode);
               setSelectedObject(null);
               setEditData({});
+              if (backMode === 'groups') {
+                setSelectedGroup(null);
+              }
             }}
             className="text-gray-500 hover:text-gray-700 text-xl"
           >
@@ -351,7 +554,8 @@ export default function EditPanel({ boardData }: EditPanelProps) {
              editMode === 'item' ? 'Éditer Item' :
              editMode === 'create-item' ? 'Créer Item' :
              editMode === 'quote' ? 'Éditer Citation' :
-             editMode === 'create-quote' ? 'Créer Citation' : 'Éditer'}
+             editMode === 'create-quote' ? 'Créer Citation' :
+             editMode === 'group-detail' ? 'Détail du Groupe' : 'Éditer'}
           </h3>
         </div>
 
@@ -522,7 +726,17 @@ export default function EditPanel({ boardData }: EditPanelProps) {
   };
 
   return (
-    <div className="w-80 max-h-[80vh] overflow-y-auto">
+    <div className="w-80 max-h-[80vh] overflow-y-auto relative">
+      {/* Loading overlay */}
+      {isPending && (
+        <div className="absolute inset-0 bg-white flex items-center justify-center z-50 rounded-lg">
+          <div className="flex flex-col items-center gap-2">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            <span className="text-sm text-gray-600">Mise à jour en cours...</span>
+          </div>
+        </div>
+      )}
+      
       {renderEditForm()}
       {editMode === 'menu' && (
         <div className="mt-4 pt-3 border-t border-gray-200">

@@ -4,7 +4,10 @@ import { QuoteSchema } from '@/src/types/schemas';
 const prisma = new PrismaClient();
 
 async function getAll(options?: { include?: Prisma.QuoteInclude }) {
-  return prisma.quote.findMany(options);
+  return prisma.quote.findMany({
+    ...options,
+    orderBy: { order: 'asc' }
+  });
 }
 
 async function getById(id: string, options?: { include?: Prisma.QuoteInclude }) {
@@ -33,5 +36,27 @@ async function remove(id: string) {
   return prisma.quote.delete({ where: { id } });
 }
 
-const quote = { getAll, getById, create, update, remove };
+async function reorder(boardId: string, orderedIds: string[]) {
+  if (!boardId || !orderedIds?.length) throw new Error('Missing boardId or orderedIds');
+  
+  const operations = orderedIds.map((id, index) =>
+    prisma.quote.update({
+      where: { id },
+      data: { order: index }
+    })
+  );
+  
+  return prisma.$transaction(operations);
+}
+
+async function getByBoardId(boardId: string, options?: { include?: Prisma.QuoteInclude }) {
+  if (!boardId) throw new Error('Missing boardId');
+  return prisma.quote.findMany({
+    where: { boardId },
+    orderBy: { order: 'asc' },
+    ...options
+  });
+}
+
+const quote = { getAll, getById, create, update, remove, reorder, getByBoardId };
 export default quote;

@@ -4,7 +4,10 @@ import { ItemSchema } from '@/src/types/schemas';
 const prisma = new PrismaClient();
 
 async function getAll(options?: { include?: Prisma.ItemInclude }) {
-  return prisma.item.findMany(options);
+  return prisma.item.findMany({
+    ...options,
+    orderBy: { order: 'asc' }
+  });
 }
 
 async function getById(id: string, options?: { include?: Prisma.ItemInclude }) {
@@ -33,5 +36,27 @@ async function remove(id: string) {
   return prisma.item.delete({ where: { id } });
 }
 
-const item = { getAll, getById, create, update, remove };
+async function reorder(groupId: string, orderedIds: string[]) {
+  if (!groupId || !orderedIds?.length) throw new Error('Missing groupId or orderedIds');
+  
+  const operations = orderedIds.map((id, index) =>
+    prisma.item.update({
+      where: { id },
+      data: { order: index }
+    })
+  );
+  
+  return prisma.$transaction(operations);
+}
+
+async function getByGroupId(groupId: string, options?: { include?: Prisma.ItemInclude }) {
+  if (!groupId) throw new Error('Missing groupId');
+  return prisma.item.findMany({
+    where: { groupId },
+    orderBy: { order: 'asc' },
+    ...options
+  });
+}
+
+const item = { getAll, getById, create, update, remove, reorder, getByGroupId };
 export default item;
