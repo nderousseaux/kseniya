@@ -3,15 +3,10 @@
 import { useState, useTransition } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Board from '@/src/types/board';
-import { 
-  updateBoard, 
-  updateGroup, 
-  deleteGroup, 
-  updateItem, 
-  deleteItem, 
-  updateQuote, 
-  deleteQuote 
-} from '@/src/actions/edit-actions';
+import { updateBoard } from '@/src/services/board/actions';
+import { updateGroup, deleteGroup } from '@/src/services/group/actions';
+import { updateItem, deleteItem } from '@/src/services/item/actions';
+import { updateQuote, deleteQuote } from '@/src/services/quote/actions';
 
 type EditMode = 'board' | 'group' | 'item' | 'quote' | null;
 

@@ -1,5 +1,5 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-import { BoardSchema } from './index';
+import { BoardSchema } from '@/src/types/schemas';
 
 const prisma = new PrismaClient();
 

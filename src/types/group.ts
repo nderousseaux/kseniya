@@ -1,6 +1,3 @@
-import { z } from 'zod';
-import { GroupSchema } from '@/src/services/group';
+import { Group } from './schemas/group';
 
-type Group = z.infer<typeof GroupSchema> & { id: string };
-
-export default Group;
+export type { Group as default };

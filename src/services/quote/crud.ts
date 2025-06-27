@@ -1,5 +1,5 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-import { QuoteSchema } from './index';
+import { QuoteSchema } from '@/src/types/schemas';
 
 const prisma = new PrismaClient();
 

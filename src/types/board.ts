@@ -1,6 +1,3 @@
-import { z } from 'zod';
-import { BoardSchema } from '@/src/services/board';
+import { Board } from './schemas/board';
 
-type Board = z.infer<typeof BoardSchema> & { id: string };
-
-export default Board;
+export type { Board as default };

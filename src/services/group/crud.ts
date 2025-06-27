@@ -1,5 +1,5 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-import { GroupSchema } from './index';
+import { GroupSchema } from '@/src/types/schemas';
 
 const prisma = new PrismaClient();
 

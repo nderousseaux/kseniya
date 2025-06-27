@@ -1,6 +1,3 @@
-import { z } from 'zod';
-import { ItemSchema } from '@/src/services/item';
+import { Item } from './schemas/item';
 
-type Item = z.infer<typeof ItemSchema> & { id: string };
-
-export default Item;
+export type { Item as default };
