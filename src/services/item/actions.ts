@@ -3,6 +3,18 @@
 import item from './crud';
 import { revalidatePath } from 'next/cache';
 
+export async function createItem(data: { name: string; description: string; groupId: string }, boardId: string) {
+  try {
+    await item.create(data);
+    revalidatePath(`/${boardId}`);
+    revalidatePath(`/${boardId}/edit`);
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to create item:', error);
+    return { success: false, error: 'Failed to create item' };
+  }
+}
+
 export async function updateItem(itemId: string, data: { name: string; description: string; groupId: string }, boardId: string) {
   try {
     await item.update({ id: itemId, ...data });

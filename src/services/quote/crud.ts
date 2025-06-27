@@ -13,7 +13,7 @@ async function getById(id: string, options?: { include?: Prisma.QuoteInclude }) 
 }
 
 async function create(data: unknown) {
-  const parse = QuoteSchema.safeParse(data);
+  const parse = QuoteSchema.omit({ id: true }).safeParse(data);
   if (!parse.success) throw parse.error;
   return prisma.quote.create({ data: parse.data });
 }

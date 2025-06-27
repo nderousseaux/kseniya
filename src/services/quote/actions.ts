@@ -3,6 +3,18 @@
 import quote from './crud';
 import { revalidatePath } from 'next/cache';
 
+export async function createQuote(data: { text: string; posX: number; posY: number; boardId: string }) {
+  try {
+    await quote.create(data);
+    revalidatePath(`/${data.boardId}`);
+    revalidatePath(`/${data.boardId}/edit`);
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to create quote:', error);
+    return { success: false, error: 'Failed to create quote' };
+  }
+}
+
 export async function updateQuote(quoteId: string, data: { text: string; posX: number; posY: number; boardId: string }) {
   try {
     await quote.update({ id: quoteId, ...data });

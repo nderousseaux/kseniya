@@ -4,17 +4,17 @@ import { useState, useTransition } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Board from '@/src/types/board';
 import { updateBoard } from '@/src/services/board/actions';
-import { updateGroup, deleteGroup } from '@/src/services/group/actions';
-import { updateItem, deleteItem } from '@/src/services/item/actions';
-import { updateQuote, deleteQuote } from '@/src/services/quote/actions';
+import { updateGroup, deleteGroup, createGroup } from '@/src/services/group/actions';
+import { updateItem, deleteItem, createItem } from '@/src/services/item/actions';
+import { updateQuote, deleteQuote, createQuote } from '@/src/services/quote/actions';
 
-type EditMode = 'menu' | 'board' | 'groups' | 'group' | 'item' | 'quotes' | 'quote';
+type EditMode = 'menu' | 'board' | 'groups' | 'group' | 'item' | 'quotes' | 'quote' | 'create-group' | 'create-item' | 'create-quote';
 
 interface EditData {
   board?: { id: string; title: string; description: string };
-  group?: { id: string; name: string; posX: number; posY: number; boardId: string };
-  item?: { id: string; name: string; description: string; groupId: string };
-  quote?: { id: string; text: string; posX: number; posY: number; boardId: string };
+  group?: { id?: string; name: string; posX: number; posY: number; boardId: string };
+  item?: { id?: string; name: string; description: string; groupId: string };
+  quote?: { id?: string; text: string; posX: number; posY: number; boardId: string };
 }
 
 interface EditPanelProps {
@@ -60,18 +60,33 @@ export default function EditPanel({ boardData }: EditPanelProps) {
             }
             break;
           case 'group':
-            if (editData.group) {
+            if (editData.group && editData.group.id) {
               result = await updateGroup(editData.group.id, editData.group);
             }
             break;
+          case 'create-group':
+            if (editData.group) {
+              result = await createGroup(editData.group);
+            }
+            break;
           case 'item':
-            if (editData.item) {
+            if (editData.item && editData.item.id) {
               result = await updateItem(editData.item.id, editData.item, boardId);
             }
             break;
+          case 'create-item':
+            if (editData.item) {
+              result = await createItem(editData.item, boardId);
+            }
+            break;
           case 'quote':
-            if (editData.quote) {
+            if (editData.quote && editData.quote.id) {
               result = await updateQuote(editData.quote.id, editData.quote);
+            }
+            break;
+          case 'create-quote':
+            if (editData.quote) {
+              result = await createQuote(editData.quote);
             }
             break;
         }
@@ -178,6 +193,16 @@ export default function EditPanel({ boardData }: EditPanelProps) {
             <h3 className="font-semibold text-gray-800">Sélectionner un groupe :</h3>
           </div>
           
+          <button
+            onClick={() => {
+              setEditMode('create-group');
+              setEditData({ group: { name: '', posX: 0, posY: 0, boardId } });
+            }}
+            className="w-full px-4 py-3 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
+          >
+            ➕ Créer un nouveau groupe
+          </button>
+          
           <div className="space-y-2">
             {boardData?.groups && boardData.groups.length > 0 ? (
               boardData.groups.map((group) => (
@@ -207,24 +232,37 @@ export default function EditPanel({ boardData }: EditPanelProps) {
                     </button>
                   </div>
                   
-                  {expandedGroups.has(group.id) && group.items && group.items.length > 0 && (
-                    <div className="space-y-1">
-                      <p className="text-xs text-gray-600">Items dans ce groupe :</p>
-                      <div className="grid gap-1">
-                        {group.items.map((item) => (
-                          <button
-                            key={item.id}
-                            onClick={() => {
-                              setEditMode('item');
-                              setSelectedObject(item.id);
-                              setEditData({ item: { id: item.id, name: item.name, description: item.description, groupId: item.groupId } });
-                            }}
-                            className="w-full px-2 py-1 bg-purple-500 text-white rounded text-xs hover:bg-purple-600 transition-colors text-left"
-                          >
-                            📄 {item.name}
-                          </button>
-                        ))}
-                      </div>
+                  {expandedGroups.has(group.id) && (
+                    <div className="space-y-2">
+                      {group.items && group.items.length > 0 && (
+                        <div className="space-y-1">
+                          <p className="text-xs text-gray-600">Items dans ce groupe :</p>
+                          <div className="grid gap-1">
+                            {group.items.map((item) => (
+                              <button
+                                key={item.id}
+                                onClick={() => {
+                                  setEditMode('item');
+                                  setSelectedObject(item.id);
+                                  setEditData({ item: { id: item.id, name: item.name, description: item.description, groupId: item.groupId } });
+                                }}
+                                className="w-full px-2 py-1 bg-purple-500 text-white rounded text-xs hover:bg-purple-600 transition-colors text-left"
+                              >
+                                📄 {item.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      <button
+                        onClick={() => {
+                          setEditMode('create-item');
+                          setEditData({ item: { name: '', description: '', groupId: group.id } });
+                        }}
+                        className="w-full px-2 py-1 bg-purple-300 text-purple-800 rounded text-xs hover:bg-purple-400 transition-colors"
+                      >
+                        ➕ Ajouter un item
+                      </button>
                     </div>
                   )}
                 </div>
@@ -251,6 +289,16 @@ export default function EditPanel({ boardData }: EditPanelProps) {
             <h3 className="font-semibold text-gray-800">Sélectionner une citation :</h3>
           </div>
           
+          <button
+            onClick={() => {
+              setEditMode('create-quote');
+              setEditData({ quote: { text: '', posX: 0, posY: 0, boardId } });
+            }}
+            className="w-full px-4 py-3 bg-orange-500 text-white rounded-lg text-sm hover:bg-orange-600 transition-colors flex items-center justify-center gap-2"
+          >
+            ➕ Créer une nouvelle citation
+          </button>
+          
           <div className="space-y-2">
             {boardData?.quotes && boardData.quotes.length > 0 ? (
               boardData.quotes.map((quote) => (
@@ -276,9 +324,9 @@ export default function EditPanel({ boardData }: EditPanelProps) {
 
     // Formulaires d'édition
     const getBackMode = () => {
-      if (editMode === 'item') return 'groups';
-      if (editMode === 'group') return 'groups';
-      if (editMode === 'quote') return 'quotes';
+      if (editMode === 'item' || editMode === 'create-item') return 'groups';
+      if (editMode === 'group' || editMode === 'create-group') return 'groups';
+      if (editMode === 'quote' || editMode === 'create-quote') return 'quotes';
       return 'menu';
     };
 
@@ -297,7 +345,13 @@ export default function EditPanel({ boardData }: EditPanelProps) {
             ←
           </button>
           <h3 className="font-semibold text-gray-800">
-            Éditer {editMode === 'board' ? 'Board' : editMode === 'group' ? 'Groupe' : editMode === 'item' ? 'Item' : 'Citation'}
+            {editMode === 'board' ? 'Éditer Board' : 
+             editMode === 'group' ? 'Éditer Groupe' : 
+             editMode === 'create-group' ? 'Créer Groupe' :
+             editMode === 'item' ? 'Éditer Item' :
+             editMode === 'create-item' ? 'Créer Item' :
+             editMode === 'quote' ? 'Éditer Citation' :
+             editMode === 'create-quote' ? 'Créer Citation' : 'Éditer'}
           </h3>
         </div>
 
@@ -330,7 +384,7 @@ export default function EditPanel({ boardData }: EditPanelProps) {
           </div>
         )}
 
-        {editMode === 'group' && editData.group && (
+        {(editMode === 'group' || editMode === 'create-group') && editData.group && (
           <div className="space-y-2">
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">Nom</label>
@@ -373,7 +427,7 @@ export default function EditPanel({ boardData }: EditPanelProps) {
           </div>
         )}
 
-        {editMode === 'item' && editData.item && (
+        {(editMode === 'item' || editMode === 'create-item') && editData.item && (
           <div className="space-y-2">
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">Nom</label>
@@ -402,7 +456,7 @@ export default function EditPanel({ boardData }: EditPanelProps) {
           </div>
         )}
 
-        {editMode === 'quote' && editData.quote && (
+        {(editMode === 'quote' || editMode === 'create-quote') && editData.quote && (
           <div className="space-y-2">
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">Texte</label>
@@ -451,9 +505,9 @@ export default function EditPanel({ boardData }: EditPanelProps) {
             disabled={isPending}
             className="flex-1 px-3 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 transition-colors disabled:opacity-50"
           >
-            {isPending ? 'Sauvegarde...' : 'Sauvegarder'}
+            {isPending ? 'Sauvegarde...' : (editMode.startsWith('create-') ? 'Créer' : 'Sauvegarder')}
           </button>
-          {editMode !== 'board' && (
+          {editMode !== 'board' && !editMode.startsWith('create-') && (
             <button
               onClick={handleDelete}
               disabled={isPending}

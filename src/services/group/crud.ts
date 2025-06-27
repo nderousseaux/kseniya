@@ -13,7 +13,7 @@ async function getById(id: string, options?: { include?: Prisma.GroupInclude }) 
 }
 
 async function create(data: unknown) {
-  const parse = GroupSchema.omit({ items: true }).safeParse(data);
+  const parse = GroupSchema.omit({ id: true, items: true }).safeParse(data);
   if (!parse.success) throw parse.error;
   return prisma.group.create({ data: parse.data });
 }

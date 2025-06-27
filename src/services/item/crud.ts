@@ -13,7 +13,7 @@ async function getById(id: string, options?: { include?: Prisma.ItemInclude }) {
 }
 
 async function create(data: unknown) {
-  const parse = ItemSchema.safeParse(data);
+  const parse = ItemSchema.omit({ id: true }).safeParse(data);
   if (!parse.success) throw parse.error;
   return prisma.item.create({ data: parse.data });
 }
